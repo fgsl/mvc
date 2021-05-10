@@ -1,0 +1,38 @@
+{
+	"name" : "fgsl/mvc",
+	"type" : "framework",
+	"description" : "Extensions of Laminas MVC",
+	"keywords" : [
+		"framework",
+		"mvc"
+	],
+	"homepage" : "https://github.com/fgsl/mvc",
+	"license" : "AGPL-3.0-or-later",
+	"autoload" : {
+		"psr-4" : {
+			"Fgsl\\" : "src/Fgsl"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"Fgsl\\Test\\" : "tests/"
+		}
+	},
+	"require" : {
+		"php" : "^7.2",
+		"doctrine/orm" : "2.*",
+		"fgsl/mock" : "2.*",
+		"fgsl/form" : "^1.0",
+		"laminas/laminas-i18n-resources" : "^2.5.0",
+		"laminas/laminas-mvc" : "^3.1.0",
+		"laminas/laminas-mvc-i18n" : "^1.0.0",
+		"laminas/laminas-mvc-plugin-flashmessenger" : "^1.0.0",
+		"laminas/laminas-navigation" : "^2.8.0",
+		"laminas/laminas-paginator" : "^2.7.0",
+		"phpunit/phpunit" : "^8.5",
+		"laminas/laminas-paginator-adapter-laminasdb" : "^1.0"
+	},
+	"config" : {
+		"secure-http" : false
+	}
+}
