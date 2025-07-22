@@ -1,15 +1,17 @@
 <?php
 namespace Fgsl\Test\Mvc;
 
-use Fgsl\Mvc\Controller\AbstractCrudController;
 use PHPUnit\Framework\TestCase;
 
 class MvcTest extends TestCase
 {
-    public function testMvc() 
+    /**
+     * @covers CrudController
+     */
+    public function testMvc()
     {
-        $controller = new CrudController(null,null);    
+        $controller = new CrudController($this->createMock(\Fgsl\Db\TableGateway\AbstractTableGateway::class),null);
         
-        $this->assertIsObject($controller->getForm());        
+        $this->assertIsObject($controller->getForm());
     }
 }

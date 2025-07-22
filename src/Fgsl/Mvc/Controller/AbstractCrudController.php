@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 /**
  *  FGSL Framework
  *  @author Flávio Gomes da Silva Lisboa <flavio.lisboa@fgsl.eti.br>
- *  @copyright FGSL 2020-2021
+ *  @copyright FGSL 2020-2025
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
@@ -19,8 +20,9 @@
 namespace Fgsl\Mvc\Controller;
 
 use Fgsl\Db\TableGateway\AbstractTableGateway;
-use Fgsl\Model\AbstractModel;
+use Fgsl\Model\AbstractActiveRecord;
 use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Db\Sql\Select;
 use Laminas\Form\Form;
 use Laminas\I18n\Translator\Resources;
 use Laminas\I18n\Translator\Translator;
@@ -35,64 +37,27 @@ use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
 
 abstract class AbstractCrudController extends AbstractActionController
 {
-    /**
-     *
-     * @var integer
-     */
-    protected $itemCountPerPage;
+    protected int $itemCountPerPage;
 
-    /**
-     *
-     * @var string
-     */
-    protected $modelClass;
+    protected string $modelClass;
 
-    /**
-     *
-     * @var string
-     */
-    protected $route;
+    protected string $route;
 
-    /**
-     *
-     * @var AbstractTableGateway
-     */
-    protected $table;
+    protected AbstractTableGateway $table;
 
-    /**
-     *
-     * @var AbstractTableGateway
-     */
-    protected $parentTable;
+    protected ?AbstractTableGateway $parentTable = null;
 
-    /**
-     *
-     * @var string
-     */
-    protected $tableClass;
+    protected string $tableClass;
 
-    /**
-     *
-     * @var string
-     */
-    protected $title;
+    protected string $title;
     
-    /**
-     * @var boolean
-     */
-    protected $activeRecordStrategy = false;
+    protected bool $activeRecordStrategy = false;
     
-    /**
-     * @var string
-     */
-    protected $pageArg = 'page';
+    protected string $pageArg = 'page';
     
-    /**
-     * @var boolean
-     */
-    protected $jsonView = false;
+    protected bool $jsonView = false;
 
-    public function __construct($table, $parentTable = null, $sessionManager = null)
+    public function __construct(AbstractTableGateway $table, ?AbstractTableGateway $parentTable = null, $sessionManager = null)
     {
         $this->table = $table;
         $this->parentTable = $parentTable;
@@ -109,11 +74,7 @@ abstract class AbstractCrudController extends AbstractActionController
         return $this->getListView($this->getPaginator());
     }
 
-    /**
-     *
-     * @return \Laminas\Paginator\Paginator
-     */
-    protected function getPaginator($alternativeSelect = null)
+    protected function getPaginator($alternativeSelect = null): Paginator
     {
         $resultSet = new ResultSet();
         $resultSet->setArrayObjectPrototype($this->table->getModel(null));
@@ -160,16 +121,10 @@ abstract class AbstractCrudController extends AbstractActionController
 
     /**
      * @param mixed $key
-     * @return string
      */
-    abstract function getEditTitle($key);
+    abstract function getEditTitle($key): string;
 
-    /**
-     *
-     * @param boolean $full
-     * @return Form
-     */
-    abstract function getForm($full = FALSE);
+    abstract function getForm(bool $full = FALSE): Form;
 
     /**
      * Action to save a record
@@ -238,11 +193,7 @@ abstract class AbstractCrudController extends AbstractActionController
         AbstractValidator::setDefaultTranslator($mvcTranslator);
     }
 
-    /**
-     *
-     * @return AbstractModel
-     */
-    protected function getObject($namespace)
+    protected function getObject($namespace): AbstractActiveRecord
     {
         return new $namespace(
             $this->table->getKeyName(),
@@ -251,28 +202,19 @@ abstract class AbstractCrudController extends AbstractActionController
         );
     }
 
-    /**
-     * @return string
-     */
-    protected function getControllerName()
+    protected function getControllerName(): string
     {
         $tokens = explode('\\',str_replace('Controller','',get_called_class()));
         $controller = end($tokens);
         return lcfirst($controller);
     }
     
-    /**
-     * @return array
-     */
-    protected function getPost()
+    protected function getPost(): \ArrayObject
     {
         return $this->getRequest()->getPost();
     }
     
-    /**
-     * return Select
-     */
-    protected function getSelect()
+    protected function getSelect(): Select
     {
         return $this->table->getSelect();
     }
@@ -306,7 +248,7 @@ abstract class AbstractCrudController extends AbstractActionController
             'urlEdit' => $urlEdit,
             'urlDelete' => $urlDelete,
             'urlHomepage' => $urlHomepage
-        ]);            
-        return $view;        
+        ]);
+        return $view;
     }
 }
