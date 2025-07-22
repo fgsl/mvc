@@ -33,7 +33,7 @@ use Laminas\Session\Container;
 use Laminas\Validator\AbstractValidator;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
-use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
+use Laminas\Paginator\Adapter\DbSelect;
 
 abstract class AbstractCrudController extends AbstractActionController
 {
